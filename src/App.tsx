@@ -2,13 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import {
   createConnection,
   createLongLivedTokenAuth,
-  HassEntity,
   subscribeEntities,
   UnsubscribeFunc
 } from 'home-assistant-js-websocket';
+import { SensorWithValue } from './types/sensors.ts';
+import { Sensors } from './const/sensors.tsx';
+import Sensor from './components/Sensor.tsx';
 
 function App() {
-  const [data, setData] = useState<HassEntity[]>([]);
+  const [data, setData] = useState<SensorWithValue[]>([]);
   const unsubscribeRef = useRef<UnsubscribeFunc>();
 
 
@@ -27,13 +29,21 @@ function App() {
             'sensor.time',
             'sensor.teplomer_balkon_temperature',
             'sensor.teplomer_obyvak_temperature',
+            'sensor.teplomer_obyvak_humidity',
             'sensor.pracka_remaining_time',
           ];
 
           const data = Object.entries(entities).filter(([entityId, _]) => {
             return sensors.includes(entityId);
-          }).map(([_, entity]) => entity);
-          setData(data);
+          });
+
+          const sensorsWithValues: SensorWithValue[] = Sensors.map(sensor => {
+            return {
+              ...sensor,
+              value: data.find(([entityId, _]) => entityId === sensor.valueKey)?.[1].state
+            };
+          });
+          setData(sensorsWithValues);
         });
       } catch (error) {
         console.error('Error connecting to Home Assistant:', error);
@@ -56,14 +66,8 @@ function App() {
   return (
     <section className="flex justify-between">
       {
-        data.map(entity => {
-          return (
-            <div key={ entity.entity_id }>
-              <h2>{ entity.attributes.friendly_name }</h2>
-              <p>{ entity.state }</p>
-            </div>
-          );
-        })
+        data.map(sensor => <Sensor sensor={ sensor }
+                                   key={ sensor.valueKey }/>)
       }
     </section>
   );
