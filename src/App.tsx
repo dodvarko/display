@@ -5,12 +5,15 @@ import {
   subscribeEntities,
   UnsubscribeFunc
 } from 'home-assistant-js-websocket';
-import { SensorWithValue } from './types/sensors.ts';
+import { SensorWithValue, WeatherForecast } from './types/sensors.ts';
 import { Sensors } from './const/sensors.tsx';
 import Sensor from './components/Sensor.tsx';
+import { extractWeatherForecastData } from './utils/weather.ts';
+import WeatherForecastTile from './components/WeatherForecastTile.tsx';
 
 function App() {
   const [data, setData] = useState<SensorWithValue[]>([]);
+  const [weatherForecast, setWeatherForecast] = useState<WeatherForecast[]>([]);
   const unsubscribeRef = useRef<UnsubscribeFunc>();
 
 
@@ -31,6 +34,7 @@ function App() {
             'sensor.teplomer_obyvak_temperature',
             'sensor.teplomer_obyvak_humidity',
             'sensor.pracka_remaining_time',
+            'sensor.weather_forecast_next_5_hours'
           ];
 
           const data = Object.entries(entities).filter(([entityId, _]) => {
@@ -43,6 +47,9 @@ function App() {
               value: data.find(([entityId, _]) => entityId === sensor.valueKey)?.[1].state
             };
           });
+
+          const wf = extractWeatherForecastData(data);
+          setWeatherForecast(wf);
           setData(sensorsWithValues);
         });
       } catch (error) {
@@ -64,10 +71,14 @@ function App() {
 
 
   return (
-    <section className="flex justify-between">
+    <section className="grid grid-cols-5 items-center justify-center h-screen">
       {
         data.map(sensor => <Sensor sensor={ sensor }
                                    key={ sensor.valueKey }/>)
+      }
+      {
+        weatherForecast.map((forecast) => <WeatherForecastTile forecast={ forecast }
+                                                               key={ forecast.hour }/>)
       }
     </section>
   );
