@@ -40,7 +40,7 @@ text/plain text/xml;
   }
 
   location ~* \.(?!jpg$)[a-z]+$ {
-    expires 1y;
+    expires -1;
     root /usr/share/nginx/html;
     index index.html index.htm;
   }
