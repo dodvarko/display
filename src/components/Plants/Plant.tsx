@@ -33,7 +33,7 @@ const Plant = ({ plant: { moisture, plant } }: PlantProps) => {
 
   const img = `url('/plants/${ plant }.jpg')`;
   return (
-    <div className="relative h-40 w-40 m-auto flex bg-center bg-contain flex-col justify-center items-center text-7xl gap-3 rounded-full border-2 border-white overflow-hidden opacity-60"
+    <div className="relative h-[230px] w-[230px] m-auto flex bg-center bg-contain flex-col justify-center items-center text-7xl  rounded-full border-2 border-white overflow-hidden opacity-60"
          style={ { backgroundImage: img } }>
       <div className={ `${ bg } absolute  h-full w-full` }
            style={ { top: `${ 100 - percentage }%` } }></div>
