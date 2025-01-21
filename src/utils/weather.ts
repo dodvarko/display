@@ -1,7 +1,7 @@
-import { HassEntity } from 'home-assistant-js-websocket';
-import { WeatherForecast, WeatherSensor } from '../types/sensors.ts';
+import { EntityData } from '../types/sensors.ts';
+import { WeatherForecast, WeatherSensor } from '../types/weather.ts';
 
-export const extractWeatherForecastData = (data: Array<[string, HassEntity]>): WeatherForecast[] => {
+export const extractWeatherForecastData = (data: EntityData): WeatherForecast[] => {
   const weatherSensor = data.find(([entityId, _]) => entityId === 'sensor.weather_forecast_next_5_hours');
   const weatherSensorAttributes = weatherSensor ? weatherSensor[1].attributes as WeatherSensor : undefined;
   return weatherSensorAttributes ? [
@@ -30,6 +30,5 @@ export const extractWeatherForecastData = (data: Array<[string, HassEntity]>): W
       temperature: weatherSensorAttributes.hour_5_temperature,
       condition: weatherSensorAttributes.hour_5_condition
     }
-
   ] : [];
-}
+};

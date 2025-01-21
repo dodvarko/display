@@ -23,6 +23,13 @@ text/plain text/xml;
     rewrite ^(.+)$ /index.html last;
   }
 
+  location /plants/ {
+    root /mounted;
+    autoindex on; # Optional: Enables directory listing for debugging
+    access_log /var/log/nginx/plants_access.log;
+    error_log /var/log/nginx/plants_error.log;
+  }
+
   location = /index.html {
     add_header Cache-Control "no-store";
     root  /usr/share/nginx/html;
@@ -32,10 +39,10 @@ text/plain text/xml;
     try_files $uri $uri/ @rewrites;
   }
 
-  location ~* \.[a-z]+$ {
+  location ~* \.(?!jpg$)[a-z]+$ {
     expires 1y;
-    root  /usr/share/nginx/html;
-    index  index.html index.htm;
+    root /usr/share/nginx/html;
+    index index.html index.htm;
   }
 
 }

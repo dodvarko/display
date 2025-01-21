@@ -1,4 +1,4 @@
-import { SensorWithValue } from '../types/sensors.ts';
+import { SensorWithValue } from '../../types/sensors.ts';
 
 type SensorProps = {
   sensor: SensorWithValue;
