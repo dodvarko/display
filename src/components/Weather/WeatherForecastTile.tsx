@@ -1,4 +1,4 @@
-import { WeatherForecast } from '../types/sensors.ts';
+import { WeatherForecast } from '../../types/weather.ts';
 
 type WeatherForecastTileProps = {
   forecast: WeatherForecast;
@@ -39,7 +39,7 @@ const conditionToIcon = (condition: string) => {
     default:
       return '🤷';
   }
-}
+};
 
 const WeatherForecastTile = ({ forecast }: WeatherForecastTileProps) => {
   return (
