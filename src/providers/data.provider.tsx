@@ -38,19 +38,7 @@ export function DataProvider({
 
         const connection = await createConnection({ auth });
         unsubscribeRef.current = subscribeEntities(connection, (entities) => {
-          const whitelist = [
-            'sensor.time',
-            'sensor.teplomer_balkon_temperature',
-            'sensor.teplomer_obyvak_temperature',
-            'sensor.teplomer_obyvak_humidity',
-            'sensor.pracka_remaining_time',
-            'sensor.weather_forecast_next_5_hours',
-            'plant.dryopteris_bushiana',
-            'plant.fikus',
-            'plant.hedera_helix',
-            'plant.monstera_deliciosa',
-            'plant.syngonium_podophyllum'
-          ];
+          const whitelist = import.meta.env.VITE_ENTITY_WHITELIST?.split(',') || [];
 
           const data = Object.entries(entities).filter(([entityId, _]) => {
             return whitelist.includes(entityId);

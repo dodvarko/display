@@ -1,6 +1,7 @@
 import { Plants, Sensors, Weather } from './components';
 import { useEffect, useRef, useState } from 'react';
 
+const ROTATION_MS = import.meta.env.VITE_ROTATION_SECONDS ? import.meta.env.VITE_ROTATION_SECONDS * 1000 : 30000;
 
 function App() {
   const intervalRef = useRef<number>();
@@ -11,7 +12,7 @@ function App() {
       setScreen((screen) => {
         return screen === 1 ? 0 : 1;
       });
-    }, 30000);
+    }, ROTATION_MS);
 
     return () => {
       if (intervalRef.current) {

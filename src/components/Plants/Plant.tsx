@@ -5,30 +5,24 @@ type PlantProps = {
   plant: PlantSensor;
 }
 
-const minMoisture = 15;
-const maxMoisture = 60;
-
-const Plant = ({ plant: { moisture, plant } }: PlantProps) => {
+const Plant = ({ plant: { daysSinceLastWatering, plant } }: PlantProps) => {
   const percentage = useMemo(() => {
-    if (moisture > maxMoisture) {
+    if (daysSinceLastWatering === 0 || daysSinceLastWatering === -1 || daysSinceLastWatering > 7) {
       return 100;
     }
 
-    if (moisture < minMoisture) {
-      return Math.max(30, (100 / minMoisture) * moisture);
-    }
+    return (100 - 100 * (daysSinceLastWatering / 7))
 
-    return Math.max(30, (100 / (maxMoisture - minMoisture)) * (moisture - minMoisture));
-  }, [moisture]);
+  }, [daysSinceLastWatering]);
 
   const bg = useMemo(() => {
-    if ((moisture < minMoisture) || (moisture > maxMoisture)) {
+    if (daysSinceLastWatering === -1 || daysSinceLastWatering > 7) {
       return `opacity-50 bg-gradient-to-t from-red-500 to-red-900`;
     }
 
     return 'opacity-50 bg-gradient-to-t from-green-900 to-green-500';
 
-  }, [moisture]);
+  }, [daysSinceLastWatering]);
 
 
   const img = `url('/plants/${ plant }.jpg')`;
