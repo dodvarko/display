@@ -28,7 +28,7 @@ export const Sensors: Sensor[] = [
     type: 'temperature'
   },
   {
-    valueKey: 'sensor.pracka_zbyvajici_cas',
+    valueKey: 'sensor.pracka_finish_time',
     icon: <LuWashingMachine/>,
     type: 'string'
   },
